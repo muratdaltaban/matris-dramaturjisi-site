@@ -1,0 +1,47 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/uygulama-iframe.html"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+
+# Kılavuz büyük dosyaları — uzun cache
+[[headers]]
+  for = "/assets/*.pdf"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+    Content-Type = "application/pdf"
+
+[[headers]]
+  for = "/assets/*.docx"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+    Content-Type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+[[redirects]]
+  from = "/anasayfa"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/manifesto"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/app"
+  to = "/uygulama.html"
+  status = 301
+
+[[redirects]]
+  from = "/kilavuz.pdf"
+  to = "/assets/Matris-Dramaturjisi-Kullanim-Kilavuzu.pdf"
+  status = 301
