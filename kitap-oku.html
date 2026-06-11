@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matris Dramaturjisi — Lehmann'dan Sonra Sahneyi Haritalamak</title>
+<meta name="author" content="Murat Daltaban">
+<meta name="description" content="Çürümenin Sanatı serisi. Spiral döngüler, kesişimsel anlam olayları ve eşik dramaturjisi üzerine yeni nesil bir tiyatro kitabı. Uygulama ve kılavuz dahil.">
+<meta name="version" content="1.0 — Haziran 2026">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+:root{
+  --bg:#faf9f6; --paper:#ffffff; --ink:#15151c; --ink2:#3a3a44; --ink3:#73737e;
+  --line:#e2e0d8; --magenta:#e6007e; --magenta-soft:#fdeaf4;
+  --serif:'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --body:Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+  --mono:'JetBrains Mono', Consolas, monospace;
+  --w:720px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:20px;line-height:1.78;-webkit-font-smoothing:antialiased}
+
+/* ── ÜST ŞERİT ── */
+.topbar{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(250,249,246,0.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:100}
+.topbar .brand{font-family:var(--mono);font-size:11px;letter-spacing:2.5px;color:var(--ink2);text-transform:uppercase;text-decoration:none}
+.topbar .brand b{color:var(--magenta)}
+.topbar .toc-link{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--ink3);text-decoration:none;text-transform:uppercase}
+.topbar .toc-link:hover{color:var(--magenta)}
+
+/* ── KAPAK ── */
+.cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:80px 8vw;position:relative;background:var(--bg)}
+.cover .series{font-family:var(--mono);font-size:12px;letter-spacing:5px;text-transform:uppercase;color:var(--magenta);margin-bottom:36px;font-weight:600}
+.cover h1{font-family:var(--serif);font-weight:500;font-size:clamp(52px,9vw,116px);line-height:0.98;letter-spacing:-0.02em;color:var(--ink);max-width:14ch}
+.cover h1 em{font-style:italic;color:var(--magenta);font-weight:400}
+.cover .subtitle{font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.6vw,30px);color:var(--ink2);margin-top:30px;max-width:30ch;line-height:1.4}
+.cover .author{margin-top:64px;font-family:var(--mono);font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--ink)}
+.cover .press{font-family:var(--mono);font-size:10px;letter-spacing:2.5px;color:var(--ink3);margin-top:10px;text-transform:uppercase}
+.cover .vmark{position:absolute;bottom:26px;right:30px;font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--ink3);text-transform:uppercase}
+.cover .rule{width:72px;height:5px;background:var(--magenta);margin-top:44px}
+
+/* ── GÖVDE ── */
+main{max-width:var(--w);margin:0 auto;padding:110px 24px 140px}
+.chapter{margin-top:130px}
+.chapter:first-of-type{margin-top:40px}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--magenta);font-weight:700;margin-bottom:18px}
+h2.ch{font-family:var(--serif);font-weight:500;font-size:clamp(36px,5.5vw,54px);line-height:1.06;letter-spacing:-0.015em;margin-bottom:30px;color:var(--ink)}
+h2.ch em{font-style:italic;color:var(--magenta)}
+h3{font-family:var(--serif);font-weight:600;font-size:27px;line-height:1.2;margin:54px 0 18px;color:var(--ink)}
+h4{font-family:var(--mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--magenta);margin:44px 0 14px;font-weight:700}
+p{margin-bottom:24px}
+p.lead{font-family:var(--serif);font-style:italic;font-size:25px;line-height:1.5;color:var(--ink2);margin-bottom:34px}
+em{font-style:italic}
+strong{font-weight:700;color:var(--ink)}
+blockquote{border-left:3px solid var(--magenta);padding:6px 0 6px 26px;margin:38px 0;font-family:var(--serif);font-style:italic;font-size:23px;line-height:1.5;color:var(--ink2)}
+blockquote cite{display:block;font-style:normal;font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--ink3);margin-top:12px;text-transform:uppercase}
+.note{background:var(--magenta-soft);border-left:4px solid var(--magenta);padding:24px 28px;margin:40px 0;font-size:18.5px}
+.note .nlabel{font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--magenta);font-weight:700;margin-bottom:10px}
+.note p{margin-bottom:14px}.note p:last-child{margin-bottom:0}
+hr.sep{border:none;height:1px;background:var(--line);margin:64px auto;width:120px}
+a{color:var(--magenta);text-decoration:none;border-bottom:1px solid currentColor}
+a:hover{color:var(--ink)}
+.atif{font-family:var(--mono);font-size:13px;color:var(--ink3);letter-spacing:0.4px}
+
+/* ── İÇİNDEKİLER ── */
+.toc{margin-top:60px}
+.toc-item{display:flex;gap:18px;align-items:baseline;padding:17px 0;border-bottom:1px solid var(--line);text-decoration:none;border-bottom-style:solid}
+.toc-item:hover .toc-title{color:var(--magenta)}
+.toc-num{font-family:var(--mono);font-size:12px;letter-spacing:1px;color:var(--magenta);font-weight:700;min-width:34px}
+.toc-title{font-family:var(--serif);font-size:23px;color:var(--ink);line-height:1.3;border-bottom:none}
+.toc-sub{font-family:var(--body);font-size:14.5px;color:var(--ink3);margin-left:auto;text-align:right;max-width:38%;line-height:1.4;display:none}
+@media(min-width:760px){.toc-sub{display:block}}
+
+/* ── OKUMA LİSTESİ ── */
+.ref{padding:22px 0;border-bottom:1px solid var(--line)}
+.ref .ref-name{font-family:var(--serif);font-size:23px;font-weight:600;color:var(--ink)}
+.ref .ref-work{font-family:var(--body);font-style:italic;font-size:18px;color:var(--ink2);margin-top:2px}
+.ref .ref-why{font-size:17px;color:var(--ink3);margin-top:8px;line-height:1.6}
+
+/* ── KOLOFON ── */
+.colophon{margin-top:130px;padding-top:50px;border-top:2px solid var(--ink);font-size:17px;color:var(--ink2)}
+.colophon h2{font-family:var(--mono);font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--ink);margin-bottom:22px}
+
+@media(max-width:640px){
+  body{font-size:18.5px}
+  main{padding:90px 18px 100px}
+  p.lead{font-size:21px}
+  blockquote{font-size:20px;padding-left:18px}
+  .cover{padding:70px 7vw}
+}
+@media print{
+  .topbar{display:none}
+  .cover{page-break-after:always}
+  .chapter{page-break-before:always}
+  body{font-size:12pt}
+}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a class="brand" href="index.html" title="Siteye dön"><b>dot</b> · matris dramaturjisi · site ↗</a>
+  <span style="display:flex;gap:22px">
+    <a class="toc-link" href="#kapak">Kapak</a>
+    <a class="toc-link" href="#icindekiler">İçindekiler</a>
+  </span>
+</nav>
+
+<!-- ════════ KAPAK ════════ -->
+<section class="cover" id="kapak">
+  <div class="series">Çürümenin Sanatı · Kitap I</div>
+  <h1>Matris <em>Dramaturjisi</em></h1>
+  <div class="subtitle">Lehmann'dan sonra sahneyi haritalamak — spiraller, kesişimler, eşikler</div>
+  <div class="rule"></div>
+  <div class="author">Murat Daltaban</div>
+  <div class="press">DOT Theatre · İstanbul — Edinburgh</div>
+  <div class="vmark">Sürüm 1.0 · Haziran 2026 · güncellenmeye açık</div>
+</section>
+
+<main>
+
+<!-- ════════ İÇİNDEKİLER ════════ -->
+<section class="chapter" id="icindekiler">
+  <div class="kicker">İçindekiler</div>
+  <h2 class="ch">Bu kitap <em>nasıl okunur</em></h2>
+  <p class="lead">Sırayla okunabilir; gerek yok. Giriş bir zemin döşer, 1. bölüm iddiayı kurar, gerisi her yönden girilebilen bir harita. Tıpkı konusu gibi.</p>
+  <div class="toc">
+    <a class="toc-item" href="#giris"><span class="toc-num">0</span><span class="toc-title">Giriş · Çürümenin Sanatı — Gözün Krizi</span><span class="toc-sub">Mitos, logos ve eşik: kitabın felsefi zemini</span></a>
+    <a class="toc-item" href="#b1"><span class="toc-num">1</span><span class="toc-title">Lehmann'dan Sonra</span><span class="toc-sub">Asıl iddia: postdramatiği operasyonelleştirmek</span></a>
+    <a class="toc-item" href="#b2"><span class="toc-num">2</span><span class="toc-title">Dürüst Soy Ağacı</span><span class="toc-sub">Spurgeon'dan Pavis'e: bu fikir nereden geliyor</span></a>
+    <a class="toc-item" href="#b3"><span class="toc-num">3</span><span class="toc-title">Sekiz Kural, Bir Harita</span><span class="toc-sub">Model — ve rizom itirazına cevap</span></a>
+    <a class="toc-item" href="#b4"><span class="toc-num">4</span><span class="toc-title">Varlık Kipleri</span><span class="toc-sub">Kategoriler, hayaletler, Derrida</span></a>
+    <a class="toc-item" href="#b5"><span class="toc-num">5</span><span class="toc-title">Generatif Kesişim</span><span class="toc-sub">Modelin en özgün kavramı: kesişim doğurur</span></a>
+    <a class="toc-item" href="#b6"><span class="toc-num">6</span><span class="toc-title">Üç Zor Sınama</span><span class="toc-sub">Godot, Crimp, Karagöz — model nerede terler</span></a>
+    <a class="toc-item" href="#b7"><span class="toc-num">7</span><span class="toc-title">Macbeth: Dost Vaka</span><span class="toc-sub">Altı spiral, iki eşik, bir doğum</span></a>
+    <a class="toc-item" href="#b8"><span class="toc-num">8</span><span class="toc-title">Benim Adım Kırmızı: Aktarım Protokolü</span><span class="toc-sub">Romandan sahneye — uyarlama bir çeviri değil, yeniden haritalamadır</span></a>
+    <a class="toc-item" href="#b9"><span class="toc-num">9</span><span class="toc-title">Bakış Kimin? AI ile Çalışmak</span><span class="toc-sub">Makinenin matrisi, yönetmenin imzası</span></a>
+    <a class="toc-item" href="#b10"><span class="toc-num">10</span><span class="toc-title">Karşı Durum</span><span class="toc-sub">Klasiklerin yapıp matrisin yapamadığı</span></a>
+    <a class="toc-item" href="#b11"><span class="toc-num">11</span><span class="toc-title">Uygulama ve Kılavuz</span><span class="toc-sub">Paketin içindekiler: araç nasıl kullanılır</span></a>
+    <a class="toc-item" href="#okuma"><span class="toc-num">+</span><span class="toc-title">Okuma Listesi</span><span class="toc-sub">Faydalandığım isimler ve kitaplar</span></a>
+    <a class="toc-item" href="#kolofon"><span class="toc-num">§</span><span class="toc-title">Kolofon — Güncelleme Notu</span><span class="toc-sub">Sürüm, lisans, bu kitap nasıl büyür</span></a>
+  </div>
+</section>
+
+<!-- ════════ GİRİŞ ════════ -->
+<section class="chapter" id="giris">
+  <div class="kicker">Giriş · Çürümenin Sanatı · Prensip 1</div>
+  <h2 class="ch">Gözün <em>krizi</em></h2>
+  <p class="lead">Bu kitap bir dramaturji modeli anlatıyor; ama model bir boşlukta doğmadı. Aşağıdaki metin, "Çürümenin Sanatı" projesinin birinci prensibidir — matris dramaturjisinin üzerinde durduğu felsefi zemin. Kitap boyunca ona döneceğiz.</p>
+
+  <h3>Mitos ve logos: iki bilgi rejimi</h3>
+  <p>İki bin beş yüz yıl boyunca Batı düşüncesinin kuruluş ekseni mitos ile logos arasındaki ayrımdı. Bu ayrım dilbilimsel bir farklılık değil; iki ayrı bilgi rejimini, dünyayı kavrama biçimini, gerçeklikle ilişkilenme biçimini birbirinden ayıran bir kırılma çizgisiydi.</p>
+  <p>Mitos — Yunanca <em>muthos</em>, "söz, anlatı, konuşma" — başlangıçta logos'un karşıtı değildi; ikisi de aynı kelime ailesindendi. Homeros'un destanlarında, Hesiodos'un <em>Theogonia</em>'sında, presokratik düşüncede mitos ve logos henüz ayrılmamıştı. Anaximandros'un <em>apeiron</em>'u, Empedokles'in dört element öğretisi, Pythagorasçıların sayı kozmolojisi — hepsi rasyonel bir yapı içinde mitik unsurları taşırdı. Heraklitos'un fragmanlarında logos hem akıl hem akıştır; hem ölçü hem ateştir. Parmenides'in tek-değişmez Bir'i bir matematiksel hipotez kadar mistik bir sezgidir. Bilgi henüz ikiye bölünmemişti.</p>
+  <p>Mitosun bilgi rejimi şuydu: anlatı, tekrar, ritüel, beden hafızası, kolektif bilinçdışı. Mitos açıklamaz, <strong>deneyimletir</strong>. Bir Eleusis ritüeline katılan kişi Demeter-Persephone mitini "öğrenmez", o miti bedeninde yaşar. Karanlık tapınağa iner, gözleri kararır, sonra ışık patlar — bu fiziksel deneyim "ölüm ve yeniden doğum" anlatısının kavramsal aktarımından çok daha kalıcı bir bilgi üretir. Mitosun zamanı döngüseldir; her yıl bahar gelir, her yıl Persephone yeraltından döner, her yıl tohum toprakta ölür ve filizlenir. Mitos öznesizdir — bir mitin "yazarı" yoktur, kolektif bedenin tortusudur.</p>
+  <p>Logos başka bir bilgi rejimini önerir: kavram, kanıt, neden-sonuç, lineer zaman, bireysel bilinç, yazı. Logos açıklar, mesafe koyar. Bir matematik teoremini "öğrenen" kişi bedenini devreye sokmaz; aklın kendi içindeki bir hareketle kavrar. Logos zamanı doğrusaldır — başlangıç, gelişme, sonuç. Logos öznesi vardır; bir argümanın imzası, bir teoremin sahibi, bir sözün yazarı. Logos yazıyla birlikte güçlenir, çünkü yazı sözü bedenden koparıp sabitler. Walter Ong'un <em>Orality and Literacy</em> (1982) kitabında gösterdiği gibi, alfabetik yazı düşüncenin geometrisini değiştirir — döngüsellikten lineerliğe, kolektiflikten bireyselliğe, akustik mekândan görsel mekâna geçiş.</p>
+
+  <h3>Sokrates'in operasyonu: ayrılığın kuruluşu</h3>
+  <p>İki bilgi rejimi arasındaki ayrımı bir kopuşa dönüştüren Sokrates oldu. Platon'un diyaloglarında Sokrates, mitosu "yalan", "kandırma", "şair laflarına benzer şeyler" olarak işaretler; logos ise <em>aletheia</em>'nın — örtüsü açılmış gerçekliğin — yoludur. <em>Devlet</em>'in onuncu kitabında şairler ideal polis'ten kovulur; çünkü şairler mitos taşır, ve mitos rasyonel düzeni bulandırır. Mağara alegorisi tam bu kopuşun manifestosudur: mağaradaki gölgeler mitostur, dışarıdaki güneş logostur; gerçek bilgi ancak mağaradan çıkıp ışığa yürümekle mümkündür. Mitik dünyanın bedenleşmiş, kolektif, döngüsel bilgisi gölge ilan edilir; logosun kavramsal, bireysel, ilerlemeci bilgisi aydınlanma olarak konumlandırılır.</p>
+  <p>Bu operasyon politik bir karar değildir; varlık düzeyinde bir tercihtir. Sokrates Dionysos'u kovduğunda — ya da Nietzsche'nin <em>Tragedyanın Doğuşu</em>'nda (1872) gösterdiği gibi, Euripides'le başlayıp Sokrates'le tamamlanan tragedyanın çöküşünde Dionysos sahneden silindiğinde — Yunan kültürünün iki damarından biri kesilir. Apolloncu form, Dionysoscu çözülmenin altında titreyen güç olmak yerine katılaşır; tragedya, mitik temelini kaybedince ahlaki ders kitabına dönüşür. Nietzsche'nin teşhisi keskindir: Sokrates'in rasyonalizmi tragedyayı öldürdü; çünkü Dionysos'suz bir sahne ölü bir sahnedir.</p>
+  <p>Aristoteles bu operasyonu kurumsallaştırır. <em>Poetika</em>'da (MÖ ~335) tragedya artık <em>muthos</em> (kurgu, öykü) olarak anlaşılır — başlangıcı, ortası, sonu olan; bir baş kahramanı, bir hatasını, bir yıkımını içeren rasyonel bir mimari. Mitos artık ehlileştirilmiştir: logosun bir alt türü olarak, "iyi yapılandırılmış öykü" olarak. Dionysos sahnede yoktur; sahne artık logosun laboratuvarıdır. Hamartia, peripeteia, anagnorisis — bunlar mitik enerjinin kavramsal çerçeveye sıkıştırılmasıdır.</p>
+  <p>Hıristiyanlık bu kurguyu yeni bir düzeyde derinleştirir. Yuhanna İncili'nin açılış cümlesi — <em>en arché en ho logos</em>, "Başlangıçta Söz vardı" — logos'u monoteize eder, tanrılaştırır. Tek logos, tek tanrı, tek hakikat. Pagan dünyanın çoğul mitik panteonu yerini Tek Söz'ün hakimiyetine bırakır. Cadı yargılamaları yüzyıllarca, kalan mitik bilgi taşıyıcılarını — şifacılar, şamanlar, ebeler, "akıl ötesi" sayılan kadınlar — sistematik olarak silmenin aracı olur. Silvia Federici'nin <em>Caliban and the Witch</em> (2004) kitabında gösterdiği gibi, cadı yakmaları yalnızca dini bir histeri değildi; mitik bilginin kapitalist-rasyonel düzene devredilirken yapılan tasfiyesiydi. Bilgi tek bir kayda — yazılı, kurumsal, eril, rasyonel — sıkıştırılır.</p>
+  <p>Aydınlanma bu sıkıştırmanın kuruluş kongresidir. Kant'ın <em>Sapere aude!</em> çağrısı, insanı kendi aklının ışığına teslim eder. Comte'un pozitivizmi, Hegel'in mutlak ruhu, Marx'ın bilimsel sosyalizmi — hepsi logosun zaferinin farklı yüzleri. Mitos artık etnografik bir merak nesnesidir; "ilkel" toplumların ya da çocuk masallarının malzemesi. Frazer'in <em>Altın Dal</em>'ı (1890) mitik düşünceyi müzeleştirir; Tylor antropolojisi onu sergiler. Mitos bir dolaba kilitlenir; anahtar logosun cebine konur.</p>
+  <p>Yirminci yüzyıl bu hakimiyetin çatlaklarını üretir. Nietzsche logos'un köklerini sarsar — <em>Şen Bilim</em>'de (1882) "Tanrı öldü"yü ilan ederken, aslında logosun monoteizmini söyler. Freud bilinçdışını keşfederken logosun temiz odasının altında bir mitik bodrum olduğunu gösterir. Jung kolektif bilinçdışı ve arketiplerle mitin geri dönüşünü işaret eder. Lévi-Strauss yapısal antropoloji ile mitin kendi mantığı olduğunu — logosun karşıtı değil, paralel bir bilgi sistemi olduğunu — ortaya koyar. Heidegger logos'un metafizik kuruluşunu sorgular; <em>aletheia</em>'yı yeniden açımlar. Ama bütün bu sorgulamalar logosun kendi içinden yapılır; logosun aygıtlarıyla, logosun kurumlarında, logosun diliyle. Yirminci yüzyıl mitosa selâm eder; ama mitos sahneye dönmemiştir. Henüz.</p>
+
+  <h3>Mitosun işgali: dijital çağda egzosferin geri dönüşü</h3>
+  <p>Yirmi birinci yüzyılda olan şudur: logos kuruluşundan beri kendi dışına attığı her şeyin geri dönüşüne tanık oluyor. Egzosferin endosferi istilası bir metafor değil, gözlenebilir bir olaydır.</p>
+  <p>Logos, kuruluşundan itibaren içine almadığı ne varsa kendi sınırının dışına attı. İlkel olan, dürtüsel olan, tuhaf olan, yabani olan, "ben" olmayan, açıklanamayan, ehlileştirilemeyen — hepsi egzosfere, dışsala sürüldü. Logosun temiz iç alanı bu dışlamalarla korundu: aklın odası kapalı tutuldu; pencereleri yargı, kapıları kanıt, duvarları kurum. Modern özne bu temiz odanın içinde kuruldu.</p>
+  <p>İletişim ağları bu odanın duvarlarını çözdü. İnternet 1990'larda kamusal alana açıldığında, kuruluş manifestosu logosun ütopyasıydı: bilginin demokratikleşmesi, küresel kütüphane, rasyonel diyalog uzamı. Yirmi yıl içinde ütopya tersine döndü. Sosyal medya algoritmaları rasyonel diyalog için değil, duygusal mobilizasyon için optimize edildi. Çünkü duygusal içerik daha çok tıklanır, daha çok izlenir, daha çok para getirir. Logosun hesabı yine logosun mantığıyla — sermaye birikimi — kendini yedi.</p>
+  <p>Egzosferin geri dönüşünün somut yüzleri: komplo teorileri — kanıt-bazlı sorgulamayla çürütülmeyen alternatif mitoslar; influencer kültürü — yeni şamanlığın dijital hali, get-ready-with-me videolarının antik hazırlık ritüeli olarak geri dönüşü; viral akımlar ve TikTok dansları — Jung'ın kolektif bilinçdışı hipotezinin algoritmik olarak somutlaşması; AI'ın "halüsinasyonları" — rasyonel makinenin kendi içinde mitos üretmesi, algoritmanın yeni oraküler işlevi; mistik geri dönüş — tarot, astroloji, manifestasyon pratiklerinin logosun nihilist boşluğuna verilen mitik cevap olması; ve tech-mythology — Kurzweil'in Tekillik'inin eskatolojik kehanete dönüşmesi, tech-elitin çağdaş yarı-tanrılar olarak kolektif bilincin merkezine yerleşmesi. Bütün bu örnekler bir tezi destekler: egzosfer endosferi istila etti. Logosun temiz odası artık duvarsız.</p>
+
+  <h3>Mitosun yıkıcılığı: işgal değil, içsel çözülme</h3>
+  <p>Ama mitosun bu geri dönüşü logosun yanına bir başka bilgi rejimi eklemekle sınırlı değildir. Mitos, logosu içeriden parçalamaktadır. Post-truth çağı tam bu çözülmenin adıdır. Bilim insanları gerçeği söylemeye devam eder, ama ses kanalları doluştuğu için artık duyulmaz. Bir komplo teorisinin viral hızı bilimsel makalenin çıkış hızını yüzlerce kat aşar. Aydınlanma'nın temel iddiası — "doğru argüman zamanla kazanır" — algoritmik çağda çürütülmüş bir hipotezdir.</p>
+  <p>Anonim öfke patlamaları, linç kültürü, ani kolektif şiddet arkaiğin dijital geri dönüşüdür. René Girard'ın <em>La Violence et le sacré</em> (1972) kitabında işaret ettiği günah keçisi mekanizması — kolektifin kendi gerilimini bir kurban üzerine boşaltarak çözmesi — antik bir mitik yapıydı. Şimdi sosyal medya üzerinde her hafta yeni bir günah keçisi seçilir, kolektif öfke onun üzerine boşaltılır, sonra sıradaki avlanır. Logos'un demokratik tartışma alanı, mitik infaz ritüelinin sahnesi haline geliyor.</p>
+  <p><em>Cogito</em> sallanır. Bu en kritik yıkımdır. Descartes 1641'de her şeyden şüphe etse bile, <em>düşünüyorum, öyleyse varım</em> en sonunda kalan kayanın üzerinde duruyordu. Modern özne bu kayanın üstüne kuruldu. Bugün cogito'nun kendisi şüphelidir, çünkü "düşünen kim" sorusu cevapsız: ben mi düşünüyorum, yoksa beslenen, yönlendirilen, algoritmik olarak kurulan bir "ben" midir? GPT'nin yazdığı bir cümle ile benim yazdığım bir cümle arasındaki fark giderek silikleşiyor. Düşünüyorum fiilinin öznesi sallanmıştır. Bu sıradan bir epistemolojik kriz değil; varlık düzeyinde bir çözülmedir.</p>
+
+  <h3>Sarsılan logos: Descartes'tan simülasyona</h3>
+  <p>Logosun temellerini sarsan en güçlü kavramsal silah Descartes'tan geliyor — kendisinden, kendisine karşı. <em>Meditationes</em>'in birinci meditasyonundaki <em>malin génie</em> — kötü cin — hipotezi tarihsel açıdan muhteşem bir kapı açar: belki de yetkin ve aldatıcı bir varlık, beni her algıda yanıltıyor. Descartes bu kapıyı Tanrı'nın iyiliğiyle kapatmaya çalıştı; ama Tanrı kanıtı Aydınlanma'nın bilimsel-ateist yönelimi tarafından sökülünce, kötü cin hipotezini tutan dam çöktü. Geriye sadece şüphe kaldı.</p>
+  <p>Yirmi birinci yüzyıl bu meseleyi pratiğe taşıdı. Nick Bostrom'un 2003'teki simülasyon argümanı Descartes'ın kötü cinini matematiksel-istatistiksel forma soktu; <em>The Matrix</em> onun görsel-bedensel halini topluma yerleştirdi. Jean Baudrillard'ın <em>Simulacres et simulation</em>'ı (1981) durumu kırk yıl önce kuramlaştırmıştı: temsil dört aşamadan geçti ve bizim aşamamızda imgenin gerçeklikle hiçbir ilgisi yok; o kendi kendinin saf simülakrıdır. Baudrillard'ın ünlü cümlesi: <strong>"Harita araziden önce gelir."</strong> Önce Instagram'daki hayat vardır; gerçek hayatı sonradan biçimlendirir. Gerçeklik artık önce gelmez; temsilden sonra, temsilin gerektirdiği şekilde gelir.</p>
+  <p>Gözün kanıtı tanıklığı taşımıyor; deepfake çağında bir görüntüyü gördüğümüz için ona inanmıyoruz. Eski logosun temel ölçütü — gör ve inan — çöktü. "Gördüğüne inan"dan "gördüğüne bile inanma"ya geçtik. Yeni logos, eski logosun kesinliği üzerine kurulamaz. Yeni logos kendi kendinden şüpheyi taşıyacak.</p>
+
+  <h3>Dionizyak çürüme: ölümün hayatı içinde taşıması</h3>
+  <p>Mitosun bu geri dönüşü bir tehdit gibi okunabilir. Bu okuma kolaydır; rahatlatıcıdır; ve eksiktir. Çünkü mitik bilgi rejimi her zaman hayatı içinde ölümü, ölümü içinde hayatı taşırdı. Dionysos parçalanan ve yeniden doğan tanrıdır. <em>Sparagmos</em> ritüeli — Bakkha'ların tanrıyı parçalaması — yıkım değil, yeniden doğuşun ön koşuludur. Demeter-Persephone döngüsü aynı yapıdır. Tohum toprağa düşer, ölmüş gibi görünür, kabuğu çürür — ve bu çürüme yeni bitkinin koşuludur. <strong>Çürümeyen tohum filiz vermez.</strong></p>
+  <p>Logos bu döngüyü kabul edemez, çünkü logos lineer zaman üzerine kuruludur. Logos için ölüm bir sondur; kayıp, yokluk, geri dönülmez. Bu yüzden modern özne ölüm karşısında bu kadar paniktir; bu yüzden Silikon Vadisi'nin longevity projeleri yüz milyar dolarlık bir endüstridir. Logos ölümü kabul edemediği için sürekli ölümle savaşır; mitos ölümü hayatın içine kattığı için onunla yaşar.</p>
+  <p>Bu kavrayışın çağın krizine bağlanması muazzamdır. Modern öznenin çözülmesi, logosun sallanması — yıkım olarak okunabileceği gibi yeniden doğum koşulu olarak da okunabilir. Eski form çürüyor; bu çürüme çıplak bir kayıp değil, yeni bir formun kompost zeminidir. Ama dikkat: bu fütürist iyimserlik değildir. Çürüme acı verir, kanlı olabilir, yıkıcıdır. Bakkhaların sparagmos'u canlı et yırtmadır. Ama bu kayıp ölü uç değil; yeniden doğuşun beden zeminidir. Mitos bunu bilir. Logos bunu unuttu.</p>
+
+  <h3>Sanat: eşiğin tarihsel mekânı</h3>
+  <p>Bütün bu argümanın bir noktada sahneye dönmesi gerekir. Çünkü sanat, mitos ile logos arasındaki ayrımı hep taşıdı, hep eşikte durdu. Antik tragedya bu ayrımın sahnedeki haliydi: Antigone hem aile yasasını (mitik, Hades, kanın bağı) hem polis yasasını (logosal, Kreon'un emri) taşır; çatışması çözülmez, çünkü ikisi farklı bilgi rejimlerinden konuşur. Tragedya bu çatışmadan estetik enerji üretirdi.</p>
+  <p>Sokrates'in operasyonundan sonra sanat logos tarafına çekildi; ama mitik damar hiç kurumadı. Wagner'in <em>Ring</em>'i, sembolistler, Joyce'un <em>Ulysses</em>'i — mitos modern yaşamın altında çalışan bir matristi. Stravinsky'nin <em>Le Sacre du printemps</em>'u (1913) mitik kurban ritüelini sahneye getirdi ve seyirciyi şok etti. Artaud "logos'u yıkın, bedene dönün" çağrısıyla mitik tiyatro idealini formüle etti; Grotowski ve Barba bu mirası sürdürdü. Pina Bausch kolektif bedenin mitik hafızasını çağdaş sahnede çalıştırdı; Robert Wilson zamanın mitik döngüselliğini logosun lineer sahnesine soktu; Heiner Müller Aydınlanma sonrası mitin enkazını sahneye yığdı; Castellucci dini ikonografiyi çağdaş bedenle kesiştirdi; Kantor bellek-ölüm-hayat döngüsünü sahneleştirdi.</p>
+  <p>Şimdi, yirmi birinci yüzyılın çeyreğinde, sanat başka bir konumdadır: artık mitos ile logosun ayrı olduğu bir dünyada onları eritmek değil; <strong>zaten eritilmiş bir dünyada bu eritmenin estetik dilini kurmak.</strong> Sanat artık eşiğin laboratuvarıdır. Sanat çağın krizini ve dönüşümünü kuramdan önce kavrar: Picasso parçalanmayı fizikten önce taşıdı; Stravinsky kolektif kurbanın geri geleceğini savaştan bir yıl önce hissetti. Bugün sanatın görevi de aynıdır: yeni logos henüz adı konmamışken, onun bedensel-estetik prototiplerini sahnede üretmek.</p>
+
+  <h3>Yeni logos eşiği</h3>
+  <p>Çağın krizi geriye dönüşle çözülmez. Saf logos'a dönüş mümkün değil; o kapı kapandı. Saf mitos'a kayış da çözüm değildir — mitosun denetimsiz hakimiyeti şiddet üretir; yirminci yüzyılın en büyük katliamları saf mitos'tan ya da logos kılığına bürünmüş mitos'tan beslendi. Çıkış yolu sentezdir, ama yeni bir sentezdir: <strong>yeni logos şüpheyi kendi çekirdeğinde barındıracak; kesinlik üzerine değil, kesin olmayanla işleyebilen bir bilmenin üzerine kurulacak.</strong></p>
+  <p>Bu yeni sentezin nasıl bir şey olacağını henüz bilmiyoruz. Henüz adı yok. Henüz kavramları yok. Bu yüzden eşikteyiz. Eşik bir ara durum değil; uzun bir an olabilir — on yıllar, belki bir yüzyıl. Bu süre içinde sanat hayati bir işlev görür: yeni sentezin estetik prototiplerini üretir. Sahne, yeni bir bilgi rejiminin doğum yatağı olabilir. Sabitlenmiş bir kategori değil — bir laboratuvar. Bir tapınak değil — bir geçit. Bir aynalı oda değil — bir eşik.</p>
+
+  <div class="note">
+    <div class="nlabel">Girişten kitaba köprü</div>
+    <p>Bu kitabın geri kalanı, bu girişin tek bir cümlesini ciddiye alır: <em>"Yeni logos kendi kendinden şüpheyi taşıyacak."</em> Matris dramaturjisi tam olarak böyle bir araçtır — kesinlik üretmeyen, kendi öznelliğini birinci kural olarak yazan, döngüsel zamanı (mitos) yapısal analizle (logos) aynı haritada tutan bir okuma çerçevesi. Spiral, mitosun döngüsüdür; test, logosun disiplinidir. Model ikisini eşikte tutar. Bu iddiayı şimdi tek tek açacağız.</p>
+  </div>
+</section>
+<!-- ════════ BÖLÜM 1 ════════ -->
+<section class="chapter" id="b1">
+  <div class="kicker">Bölüm 1 · Asıl iddia</div>
+  <h2 class="ch">Lehmann'dan <em>sonra</em></h2>
+  <p class="lead">Bu modeli yıllarca yanlış tanıttım. "Aristoteles'e karşı bir dramaturji" dedim — kulağa cesur geliyordu. Sonra anladım: Aristoteles'i yenmek kolaydır, çünkü Aristoteles iki bin dört yüz yıldır savunmasız. Asıl soru başkaydı.</p>
+
+  <p>Asıl soru şu: Hans-Thies Lehmann <em>Postdramatik Tiyatro</em>'yu 1999'da yayımladı. Lineer olay örgüsünün, merkezi karakterin, dramatik bütünlüğün artık sahnenin zorunlu omurgası olmadığını — metnin sahnenin patronu değil, ortaklarından biri olduğunu — çeyrek yüzyıl önce gösterdi. Bugün herhangi bir dramaturji modelinin cevaplaması gereken soru "Aristoteles'i aşabiliyor mu?" değil. O iş bitti. Soru şu: <strong>Lehmann'dan sonra hâlâ söylenecek ne kaldı?</strong></p>
+
+  <p>Cevabım: teşhis kondu, araç verilmedi. Lehmann postdramatik durumu tarif etti — parataksis, eşzamanlılık, gösterge yoğunluğuyla oynama, müzikalleşme, bedenin merkezîleşmesi. Muhteşem bir teşhis. Ama provaya girdiğinizde elinizde ne var? Bir durum tarifi. Pazartesi sabahı oyuncuların karşısına "parataksis" kavramıyla çıkamazsınız. Postdramatik kuram size sahnenin artık nasıl <em>olmadığını</em> söyler; nasıl <em>kurulacağını</em> söylemez. Bu bir suçlama değil — Lehmann'ın işi o değildi. Ama boşluk orada duruyor.</p>
+
+  <p>Matris dramaturjisi o boşluğa yerleşir: <strong>postdramatik içgörünün operasyonel aracı olmak.</strong> Lineer olay örgüsü yerine paralel tematik yörüngeler; merkezi karakter yerine kesişim düğümleri; tek doruk yerine yoğunluk eşikleri. Bunların hepsi Lehmann'ın teşhisiyle uyumlu — ama hepsi <em>çalıştırılabilir</em>: adlandırılabilir, haritalanabilir, provada tartışılabilir, bir tasarımcıya gösterilebilir. Giriş'teki cümleye dönersek: yeni logos kendi kendinden şüpheyi taşıyacak. Matris, şüpheyi birinci kuralına yazmış bir logos'tur — sahne için.</p>
+
+  <h3>Aynı raftakiler</h3>
+  <p>Bu rafta yalnız değilim ve bunu saklamanın âlemi yok. Marianne Van Kerkhoven 1990'larda "açık dramaturji" kavramını ortaya attı: dramaturji bitmiş bir planın uygulanması değil, prova sürecinde oluşan, kapanmayan bir düşünme pratiğidir. Matrisin "güncellenmeye açık harita" fikri Van Kerkhoven'a borçludur. Eugenio Barba, Odin Teatret'te dramaturjiyi "eylemlerin dokunması" olarak tanımladı — örgü, iplik, doku metaforları; tek çizgi değil, eşzamanlı katmanlar. Spiral fikrimin akrabası orada. Cathy Turner ile Synne Behrndt <em>Dramaturgy and Performance</em>'ta (2008) bu yeni dramaturji pratiklerinin haritasını çıkardı; matris o haritada bir bölgeye yerleşir, haritanın dışına değil.</p>
+
+  <p>En rahatsız edici yakınlık Patrice Pavis'le. Pavis'in "vektörizasyon" kavramı — sahnedeki göstergelerin yön, yoğunluk ve bağlantı çizgileri olarak okunması — benim "mutasyon vektörü"me tehlikeli kadar yakın durur. Farkımız şurada: Pavis'in vektörleri <em>gösterge</em> düzeyinde çalışır, performansın okunmasında; matrisin vektörleri <em>tematik varlık</em> düzeyinde çalışır ve bir temanın varlık kipinin değişimini izler. Pavis sahneyi okur; matris metinden sahneye giden dönüşümü haritalar. Yakınlık gerçek, fark da gerçek. İkisini birden söylemek gerekiyor — yalnızca farkı söylersem entelektüel hırsızlık, yalnızca yakınlığı söylersem teslimiyet olur.</p>
+
+  <div class="note">
+    <div class="nlabel">Bu bölümün tek cümlesi</div>
+    <p>Matris dramaturjisi Aristoteles'e karşı bir manifesto değil; Lehmann'dan sonra sahneye dönen yönetmenin elindeki boşluğu dolduran bir çalışma aracıdır. Pazarlama "karşı"yı sever; bilim "sonra"yı yazar.</p>
+  </div>
+</section>
+
+<!-- ════════ BÖLÜM 2 ════════ -->
+<section class="chapter" id="b2">
+  <div class="kicker">Bölüm 2 · Öncüller</div>
+  <h2 class="ch">Dürüst <em>soy ağacı</em></h2>
+  <p class="lead">Hiçbir fikir gökten düşmez. Matrisin her parçasının bir atası var; onları saklamak özgünlüğü artırmaz, tam tersine asıl özgün olanı görünmez kılar. İşte borç listem — kalem kalem.</p>
+
+  <p><strong>Caroline Spurgeon, 1935.</strong> <em>Shakespeare's Imagery and What It Tells Us</em>. Spurgeon, Shakespeare oyunlarındaki imgeleri tek tek sayıp kümeledi ve her oyunun kendine özgü bir imge ailesi olduğunu gösterdi: <em>Macbeth</em>'te kan ve üste oturmayan giysiler, <em>Hamlet</em>'te hastalık ve çürüme. Bunlar proto-spirallerdir — tema kümelerinin oyunu sessizce yönettiği fikri ondan gelir. Spurgeon'un yapamadığı şey, kümelerin <em>zaman içinde dönüştüğünü</em> izlemekti; onun yöntemi statik bir envanterdi. Spiral, Spurgeon'un envanterine zaman ekler.</p>
+
+  <p><strong>G. Wilson Knight, 1930.</strong> <em>The Wheel of Fire</em>. Knight radikal bir şey söyledi: Shakespeare oyunları zamansal bir öykü gibi değil, <em>uzamsal bir desen</em> gibi okunmalıdır — oyunun tamamı tek bir genişletilmiş metafordur. "Oyunu harita gibi oku" fikrinin atası odur. Matrisin grid görünümü, topoloji sekmesi, üç boyutlu haritası — hepsi Knight'ın uzamsal okuma sezgisinin teknolojik torunlarıdır.</p>
+
+  <p><strong>Franco Moretti, 2011.</strong> "Network Theory, Plot Analysis." Moretti <em>Hamlet</em>'i bir karakter ağı olarak çizdi: kimin kiminle konuştuğu — düğümler ve bağlantılar. Karakteri psikolojik bir iç dünya olarak değil, <em>ağdaki bir konum</em> olarak okumak: Kural 5'in ("karakter özne değil, kesişim düğümüdür") doğrudan öncülü budur. Farkım şu: Moretti'nin ağı karakterler arasındadır; matrisin düğümü karakterle <em>temalar</em> arasındadır. Lady Macbeth, Moretti'de konuşma trafiğinin bir düğümü; matriste cinsiyet, suçluluk, kan ve delilik spirallerinin kesişimidir.</p>
+
+  <p><strong>W. B. Yeats.</strong> <em>A Vision</em>'daki gyre'lar — iç içe dönen, genişleyen ve daralan koniler; tarihin ve ruhun spiral hareketi. "Spiral" kelimesini kullandığım anda Yeats'in gölgesi odadadır; bunu bilerek yapıyorum. Yeats'te spiral kozmolojik bir kehanetti; matriste analitik bir alet. Ama temanın düz çizgide değil, her dönüşte başka bir yükseklikte dönerek ilerlediği sezgisi — o sezgi Yeats'indir.</p>
+
+  <p><strong>Hans-Thies Lehmann, 1999.</strong> Borcu önceki bölümde döktüm: teşhis onun, araç boşluğu benim adresim.</p>
+
+  <p><strong>Marianne Van Kerkhoven.</strong> Açık dramaturji — dramaturjinin prova sürecinde oluşan, bitmeyen bir düşünme olduğu fikri. Matrisin kapanmayan harita karakteri (Kural 8) ve bu kitabın "güncellenmeye açık" olması doğrudan onun mirasıdır.</p>
+
+  <p><strong>Eugenio Barba.</strong> Dokuma dramaturjisi: sahne tek iplik değil, eşzamanlı ipliklerin örgüsüdür. Paralel spiraller fikrinin tiyatro antropolojisindeki karşılığı.</p>
+
+  <p><strong>Erika Fischer-Lichte, 2004.</strong> <em>Performatifin Estetiği</em>. Sahne ile seyirci arasındaki otopoietik geribesleme döngüsü — canlı performansın kendi kendini üreten enerji devresi. Beşinci bölümde onunla bir terim hesabım var; şimdilik şu kadarını söyleyeyim: performansın <em>üretken</em> olduğu, temsil etmekle kalmayıp var ettiği fikri ondan öğrenilir.</p>
+
+  <p><strong>Patrice Pavis.</strong> Vektörizasyon — önceki bölümde yüzleştik. Soy ağacında en yakın akraba; tam da bu yüzden en dikkatli ayrıştırılması gereken.</p>
+
+  <p>Bu liste beni küçültmüyor. Spurgeon'un envanterine zamanı, Knight'ın uzamına dinamiği, Moretti'nin ağına temaları, Yeats'in spiraline testi ekleyen sentez — matris budur. Sentez özgündür; parçaların künyesi açıktır. Giriş'te cadı yakmalarından söz etmiştim: bilginin tek kayda sıkıştırılması. Bir soy ağacını saklamak da aynı işlemin küçük ölçeklisidir — bilgiyi tek imzaya sıkıştırmak. Yapmayacağım.</p>
+</section>
+
+<!-- ════════ BÖLÜM 3 ════════ -->
+<section class="chapter" id="b3">
+  <div class="kicker">Bölüm 3 · Model</div>
+  <h2 class="ch">Sekiz kural, <em>bir harita</em></h2>
+  <p class="lead">Model sekiz kuraldan oluşur. Bunlar dogma değil; çerçevenin çalışması için gereken asgari disiplin. Yedisi dönüştürülebilir — birincisi kurucu.</p>
+
+  <p><strong>Kural 1 — Rejisörün bakışı özneldir; parametreler dönüştürülebilir.</strong> Aynı metinden iki yönetmen iki farklı matris çıkarır ve bu bir hata değil, modelin varlık sebebidir. İki farklı matris iki farklı yorum bile değil — iki farklı <em>prodüksiyondur</em>. Diğer yedi kural da bu kuralın altındadır: kategorileri değiştirebilirsiniz, testleri ağırlaştırabilirsiniz, katman ekleyebilirsiniz. Tek değişmeyen, değişebilirliğin kendisi.</p>
+
+  <p><strong>Kural 2 — Spiral, leitmotif değildir.</strong> Bir temanın spiral sayılması için her dönüşünde <em>varlık kipinin</em> kategorik olarak değişmesi gerekir. Bağlam değişimi yetmez. Beş kez tekrarlanan kan sahnesi, beşinde de maddi kansa, elinizdeki leitmotiftir — değerli, ama başka bir şey. <em>Macbeth</em>'te kan maddi onurdan (savaş yarası) maddi suça (hançer), oradan hayaletselliğe (çıkmayan leke), sembolik bulaşmaya ve en sonunda fenomenolojik kokuya ("Arabistan'ın bütün kokuları...") dönüşür. Kategori değişiyor; spiral budur.</p>
+
+  <p><strong>Kural 3 — Sayılar sabit değil, testler sabittir.</strong> Faz sayısı, spiral sayısı önceden belirlenmez. Asgari üç faz — üst sınır yok. Bütün spirallere dörder faz vermek simetri tuzağıdır; gerçek temalar eşit dönmez. Kehanet üç uğrakta tükenir, delilik beş kez kabuk değiştirir. Simetri gördüğünüz yerde genellikle analiz değil, dolgu vardır.</p>
+
+  <p><strong>Kural 4 — Kesişim, örtüşme değildir.</strong> İki temanın aynı sahnede bulunması kesişim değildir; karşılıklı deformasyon şarttır. Test karşı-olgusaldır: <em>A olmasaydı B farklı mı dönüşürdü?</em> Cevap hayırsa elinizdeki eşzamanlılıktır. Bu testin sonuçları üç kesişim tipi verir: eşzamanlı (buluşma var, dönüşüm yok), deformasyon (biri diğerinin yörüngesini büker), generatif (kesişim yeni bir spiral doğurur — beşinci bölümün konusu).</p>
+
+  <p><strong>Kural 5 — Karakter özne değil, kesişim düğümüdür.</strong> Karakterin karmaşıklığı iç dünyasının derinliğinden değil, içinden geçen spirallerin sayısından ve çeşitliliğinden gelir. Lady Macbeth dört spiralin düğümüdür; Macduff'ın matristeki yüzeyi çok daha dardır. Bu, psikolojiyi yasaklamaz — oyuncunun masasından kaldırmaz; yönetmenin haritasında ikincil kılar.</p>
+
+  <p><strong>Kural 6 — Doruk bir an değil, bir eşiktir.</strong> Yoğunluğun sistemin taşıma kapasitesini aştığı bölge. Sayısı sınırsız: hiç olmayabilir, iki olabilir. Giriş'teki eşik kavramının dramaturjik ölçeğe inmiş hali budur — sahne, çağın eşiğini oyun içi eşiklerde prova eder.</p>
+
+  <p><strong>Kural 7 — Kategoriler açık uçludur.</strong> Modelin yedi varsayılan varlık kipi bir başlangıç setidir; silinebilir, çoğaltılabilir, prodüksiyona göre yeniden yazılabilir. Dördüncü bölümün konusu.</p>
+
+  <p><strong>Kural 8 — Model hermeneutiktir.</strong> Matris "doğru okumayı" üretmez; bir okumayı görünür, temellendirilebilir ve paylaşılabilir kılar. Doğrulama makinesi değil, yorum makinesi.</p>
+
+  <h3>Rizom itirazı — ve harita savunması</h3>
+  <p>Şimdi en sert itiraza geleyim; çünkü ben sormadan birisi soracak, ve soran köşeye sıkıştıracak. İtiraz şu: "Modelin adı <em>matris</em> — satır, sütun, ızgara. Deleuze ile Guattari'nin terimleriyle bu <em>çizgili mekân</em>dır, kraliyet bilimidir; rizom tam da bunun olmadığı şeydir. Rizomatik dramaturji iddiasıyla ızgara kurmak kendi kendini çürütmektir."</p>
+
+  <p>Cevabım Deleuze ile Guattari'nin kendi ayrımından geliyor: <strong>harita ile kopya</strong> (carte/calque). <em>Bin Yayla</em>'nın girişinde rizomun kopya değil harita olduğu yazar — harita açıktır, her boyutuyla bağlanabilir, sökülebilir, tersine çevrilebilir, sürekli değişikliğe uğratılabilir; bir birey onu duvara çizebilir, silip yeniden çizebilir. Kopya ise hep aynının yeniden üretimidir.</p>
+
+  <p>Matris, oyunun kopyası değil haritasıdır. Oyun rizomdur — köksap gibi her yöne uzanan, merkezi olmayan canlı doku. Matris o dokunun <em>bir</em> haritasıdır: açık (Kural 7), sökülüp yeniden çizilebilir (Kural 1), kapanmaz (Kural 8). Izgara görünümü bir ekran düzenidir, ontolojik bir iddia değil. Deleuze'ün haritası da kâğıda çizilir; kâğıdın dikdörtgen olması haritayı kopya yapmaz. Soru şekil sorusu değil, işleyiş sorusudur: bu harita kapatıyor mu, açıyor mu? Kural 1 oradayken — herkes kendi haritasını çizebilirken — matris açar.</p>
+
+  <blockquote>Oyun rizomdur; matris onun kopyası değil, haritasıdır.<cite>Bin Yayla'nın girişine bir reji notu</cite></blockquote>
+</section>
+<!-- ════════ BÖLÜM 4 ════════ -->
+<section class="chapter" id="b4">
+  <div class="kicker">Bölüm 4 · Kategoriler</div>
+  <h2 class="ch">Varlık <em>kipleri</em></h2>
+  <p class="lead">Modelin ilk sürümlerinde bunlara "ontolojik kategoriler" diyordum. Bir felsefeci dostum tek cümleyle yıktı: "Listende ontolojiden bir, göstergebilimden bir, fenomenolojiden bir, performans kuramından bir terim var — şemsiyene ontoloji yazmışsın." Haklıydı. Adı değiştirdim; gevşekliği savunmaya karar verdim.</p>
+
+  <p>Yeni ad: <strong>varlık kipleri</strong>. Bir temanın o fazda sahnede <em>nasıl var olduğunu</em> adlandıran etiketler. Yedi varsayılan kip şunlar: <strong>maddi</strong> (elle tutulur — hançerdeki kan), <strong>sembolik</strong> (bir şeyin yerine geçen — bulaşma olarak kan), <strong>fenomenolojik</strong> (algıda yaşanan — koku olarak kan), <strong>somatik</strong> (bedene yazılan — el ovma hareketi), <strong>performatif</strong> (söylenince var olan — lanet, yemin), <strong>hayaletsel</strong> (orada olmayan ama görünen — Banquo, hançer), <strong>epistemik</strong> (bilgi statüsü taşıyan — kehanet, sır).</p>
+
+  <p>Bu liste felsefi bir taksonomi değil; prova masası için bir alet çantasıdır. Beş ayrı disiplinden terim taşıdığını biliyorum — ve bunu kusur değil, tercih olarak savunuyorum. Çünkü sahne de tam olarak böyle çalışır: bir nesne aynı akşam içinde maddi, sembolik ve hayaletsel olabilir. Yönetmenin ihtiyacı kavramsal saflık değil, dönüşümü <em>adlandırabilmektir</em>. Disiplinler arası gevşeklik, sahnenin disiplinler üstü doğasının dilidir. Kural 7 zaten kaçış kapısını açık tutar: kipleri beğenmeyen siler, kendi kiplerini yazar. Bir ses tasarımcısıyla çalışırken "akustik" kipi ekledik; bir mekân-temelli işte "topografik" kipi. Liste prodüksiyonla birlikte nefes alır.</p>
+
+  <h3>Hayalet meselesi: Derrida'ya selam</h3>
+  <p>"Hayaletsel" kipini kullanıp Jacques Derrida'yı anmamak ya cehalet ya saklama olurdu; ikisi de bana yakışmaz. Derrida <em>Marx'ın Hayaletleri</em>'nde (1993) <em>hauntologie</em> kavramını önerdi — ontolojinin içine yerleşen hayaletbilim: ne tam var ne tam yok olanın, geçmişten gelip şimdiyi rahatsız edenin, gelecekten gelip henüz olmamış olanın varlık biçimi. Banquo'nun sofradaki sandalyesi tam budur: orada-olmayan, ama sahneyi yöneten. Matristeki hayaletsel kip, Derrida'nın hauntolojisinin dramaturjik küçük ölçeklisidir — varlık ile yokluk arasındaki o üçüncü bölgenin etiketi.</p>
+
+  <p>Giriş'le bağı kurmadan geçmeyeyim: Gözün Krizi'nde egzosferin geri dönüşünü anlatmıştım — logosun dışarı attığının içeri sızması. Hayaletsel kip, o sızıntının sahnedeki adıdır. Deepfake çağının seyircisi "orada olmayan ama görünen"i gündelik hayatından tanır; sahnedeki hayalet artık metafizik bir egzotizm değil, çağın kendi deneyiminin yoğunlaştırılmış halidir. Hayalet kategorisi bu yüzden yedi kipin içinde en çağdaş olanıdır.</p>
+
+  <div class="note">
+    <div class="nlabel">Pratik kural</div>
+    <p>Bir fazın kipini seçerken soru şudur: <em>bu tema şu anda sahnede nasıl var?</em> Elle tutuluyor mu, bir şeyin yerine mi geçiyor, algıda mı yaşanıyor, bedene mi yazılı, söylenince mi oluyor, yok ama görünüyor mu, bilgi olarak mı dolaşıyor? Cevap ikiden fazlaysa sahneniz zengindir; hiç verilemiyorsa faz muhtemelen faz değildir.</p>
+  </div>
+</section>
+
+<!-- ════════ BÖLÜM 5 ════════ -->
+<section class="chapter" id="b5">
+  <div class="kicker">Bölüm 5 · Modelin kalbi</div>
+  <h2 class="ch">Generatif <em>kesişim</em></h2>
+  <p class="lead">Modelde en çok güvendiğim kavram bu — ve en az anlattığım. Bu bölüm o borcu ödüyor: iki spiralin kesişiminden, önceden var olmayan üçüncü bir spiralin doğması.</p>
+
+  <p>Önce terim hesabı. Bu olguya bir süre "otopoietik kesişim" dedim ve yanlıştı. <em>Autopoiesis</em> — Maturana ile Varela'nın biyolojiden getirdiği, Fischer-Lichte'nin tiyatroya taşıdığı kavram — bir sistemin <em>kendi örgütlenmesini koruyarak kendini yeniden üretmesidir</em>. Hücre kendini yapar; performansın geribesleme döngüsü kendini sürdürür. Oysa generatif kesişimde olan şey örgütlenmenin korunması değil, <strong>yeni bir örgütlenmenin ortaya çıkmasıdır</strong>. Bunun bilimdeki adı başka: <strong>emerjans</strong> — parçaların hiçbirinde olmayan özelliğin, parçaların ilişkisinden doğması. Su ıslaktır; ne hidrojen ıslaktır ne oksijen. Fischer-Lichte'nin terimini iade ediyorum; kendi kavramıma doğru adını veriyorum: generatif kesişim bir emerjans olayıdır.</p>
+
+  <h3>Macbeth'te doğum</h3>
+  <p><em>Macbeth</em>'te güç spirali ile suçluluk spirali üçüncü perdede kesişir: taht alınmıştır (güç, gasp fazında) ama Banquo'nun hayaleti sofradadır (suçluluk, projeksiyon fazında). Bu kesişimden yeni bir şey doğar: <strong>paranoya</strong>. Paranoya birinci perdede yoktur — ne güçte vardır ne suçlulukta. "Herkes düşman olabilir" yapısı, gücün koruma refleksi ile suçluluğun projeksiyon mekanizmasının <em>çocuğudur</em>. Doğduktan sonra da kendi hayatını yaşar: kendi fazlarını üretir (Banquo cinayeti, Macduff'ın ailesi, "her şeyi öldür" nihilizmi), kendi kesişimlerine girer, oyunun son iki perdesini fiilen yönetir. Ana-babasına indirgenemez; işte emerjansın testi budur.</p>
+
+  <h3>Koşullar: her kesişim doğurmaz</h3>
+  <p>Generatif kesişim nadirdir ve nadir kalmalıdır; her kesişimi generatif ilan eden analiz, kavramı enflasyona uğratır. Gözlemlediğim üç koşul var. <strong>Bir:</strong> iki spiral de kesişim anında yüksek yoğunlukta olmalı — sönük temalar çocuk yapmaz. <strong>İki:</strong> kesişim tipi deformasyon olmalı, eşzamanlılık değil; birbirini bükmeyen yörüngeler yeni yörünge üretmez. <strong>Üç:</strong> doğan şey, ebeveynlerinin toplamından fazlasını yapmalı — kendi fazları, kendi kesişimleri, tercihen kendi karakterleri olmalı. Paranoya bu üç testi de geçer. "Pişmanlık" geçmez: pişmanlık suçluluğun bir fazıdır, yeni bir spiral değil.</p>
+
+  <p>Başka örnekler: Çehov'un <em>Vişne Bahçesi</em>'nde bellek spirali ile mülkiyet spirali kesişir ve "satılamayan zaman" doğar — bahçe ne maldır ne anı; ikisinin emerjansıdır ve oyunun gerçek protagonisti odur. <em>Hamlet</em>'te yas ile tiyatro (oyun-içinde-oyun) kesişir ve "performe edilen delilik" doğar — ne saf yas ne saf oyun; Hamlet'in son perdelere kadar üzerinde durduğu üçüncü zemin. Kendi sahnemden: <em>Benim Adım Kırmızı</em> üzerine çalışırken (sekizinci bölümde ayrıntısı var) minyatür spirali ile cinayet spiralinin kesişiminden "görme suçu" doğdu — bakmanın kendisinin cinayet ortaklığı haline gelmesi. Prova öncesi haritada yoktu; haritayı güncelledik. Van Kerkhoven haklı: dramaturji kapanmaz.</p>
+
+  <p>Giriş'e son bir atıf: Gözün Krizi'nde çürümenin bereket koşulu olduğunu yazmıştım — çürümeyen tohum filiz vermez. Generatif kesişim bu döngünün dramaturjik halidir: iki spiral kesişimde <em>deforme olur</em> — bir tür yapısal çürüme — ve tam o deformasyondan yeni hayat çıkar. Dionizyak mantık, analiz masasında.</p>
+</section>
+
+<!-- ════════ BÖLÜM 6 ════════ -->
+<section class="chapter" id="b6">
+  <div class="kicker">Bölüm 6 · Stres testi</div>
+  <h2 class="ch">Üç zor <em>sınama</em></h2>
+  <p class="lead">Bir model yalnızca dost vakalarla test edilmişse test edilmemiştir. Bu bölümde matrisi üç zor metne sokuyorum — ve nerede terlediğini saklamadan yazıyorum.</p>
+
+  <h3>Sınama 1 · Godot: protagonistsiz oyun</h3>
+  <p>Beckett'in <em>Godot'yu Beklerken</em>'i klasik modellerin kâbusudur: kahraman yok, yolculuk yok, doruk yok, çözüm yok. "Hiçbir şey olmuyor, iki kez." Matris ne görür? Dört spiral görür: <strong>bekleme</strong> (epistemik umuttan performatif rutine, oradan somatik alışkanlığa), <strong>beden</strong> (ayaklar, şapkalar, açlık — maddi sefaletten neredeyse vodvil performatifliğine), <strong>hafıza</strong> ("dün burada mıydık?" — epistemik belirsizlikten hayaletsel tekrara), <strong>öteki</strong> (Pozzo-Lucky ekseni — maddi kölelikten körlük-dilsizlikle fenomenolojik çöküşe). Karakter düğümü olarak Vladimir ile Estragon neredeyse aynı spirallerden geçer; zaten oyunun meselesi de bu — iki kişilik tek düğüm.</p>
+  <p><strong>Model nerede terler:</strong> Kural 2'nin ontolojik mutasyon şartı Beckett'te zorlanır, çünkü Beckett mutasyonu <em>vermemek</em> üzerine kuruludur. Bekleme spirali gerçekten kip değiştiriyor mu, yoksa aynı kipin amansız tekrarı mı? Dürüst cevap: ikinci perde birinci perdenin hafifçe bozulmuş kopyasıdır — mutasyon var ama mikroskobik. Matris bunu ancak "fazlar arası fark yoğunluğu"nu düşürerek haritalayabilir. Model çalışır, ama Beckett'in asıl jesti — değişimin reddi — haritada negatif alan olarak görünür. Bunu kusur saymıyorum; haritanın boş bölgesi de bilgidir. Ama şunu kabul ediyorum: matris değişimi izlemek için yapılmıştır; değişimsizliği ancak dolaylı anlatır.</p>
+
+  <h3>Sınama 2 · Crimp: karaktersiz metin</h3>
+  <p>Martin Crimp'in <em>Attempts on Her Life</em>'ı (1997) on yedi senaryodan oluşur; sahnede kim olduğu belirtilmeyen sesler, hiç görünmeyen bir Anne hakkında konuşur. Karakter yoksa Kural 5 — karakter düğümdür — neyi düğümler? İşte cevap ve modelin bu sınamadaki sürprizi: <strong>Anne'nin kendisi bir karakter değil, bir kesişim düğümüdür — sahnede bedeni olmayan saf düğüm.</strong> Terörist, sanatçı, araba modeli, göçmen, kız evlat: her senaryo Anne'ye başka bir spiral bağlar (şiddet, temsil, meta, kimlik). Crimp'in yaptığı şey, matrisin karakter tanımını sahneleştirmektir: özne yok, kesişim var. Model burada terlemez; tersine, Crimp matrisin en güçlü kanıtıdır — Kural 5'i oyunlaştırır.</p>
+  <p><strong>Yine de terleme noktası:</strong> on yedi senaryonun sırası. Matris fazları zamansal sırayla dizer; Crimp'te sıra neredeyse keyfîdir, senaryolar yer değiştirebilir. Modelin zaman ekseni burada gevşetilmeli — fazlar "1. perde, 2. perde" yerine "konfigürasyon A, B, C" olarak okunmalı. Yapılabilir; ama varsayılan ayar değil. Kural 1 burada devreye girer: parametre dönüştürülür.</p>
+
+  <h3>Sınama 3 · Karagöz ile meddah: kanonun dışı</h3>
+  <p>En sert sınamayı sona sakladım, çünkü ev ödevim: İstanbul'dan kalkıp dramaturji modeli kuran biri Batı kanonuyla test edip duramaz. Karagöz'e bakalım. Perde, tasvirler, Hacivat'la kavga, fasıl yapısı: gevşek epizodlar, doğaçlama, güncel taşlama. Aristoteles burada tamamen çaresizdir — mythos birliği yok, hamartia yok, katharsis hedeflenmez bile. Matris ne yapar? Şaşırtıcı derecede iyi iş çıkarır, çünkü Karagöz zaten lineer değildir: <strong>dil</strong> spirali (Hacivat'ın Osmanlıcası ile Karagöz'ün halk dili — epistemik üstünlükten performatif komediye, oradan iktidar taşlamasına), <strong>perde</strong> spirali (gölgenin kendisi: maddi bez, hayaletsel suret, metateatral çerçeve — "perde sırrı" tekerlemeleri gölgenin varlık kipini açıkça tartışır), <strong>kılık</strong> spirali (her fasılda Karagöz'ün girdiği yeni iş/kimlik — performatif kimliğin seri mutasyonu).</p>
+  <p><strong>Model nerede terler:</strong> iki yerde. Birincisi, fasıl yapısında fazlar oyun <em>içinde</em> değil, repertuvar <em>genelinde</em> döner — spiral tek gösterimde değil, gelenekte yaşar. Matrisin birimi "bir oyun"dur; Karagöz'ün birimi bir gelenektir. Modeli gelenek ölçeğine taşımak mümkün ama bu başka bir kitap. İkincisi: meddahın doğaçlaması. Matris bir metni haritalar; meddah her gece başka metin üretir. Burada matris ancak <em>sonradan</em>, belgeleme aracı olarak çalışır — üretim aracı olarak değil. Sınırı kabul ediyorum ve not ediyorum: doğaçlama temelli formlar için matrisin gerçek-zamanlı bir versiyonu gerekir. Henüz yok.</p>
+
+  <div class="note">
+    <div class="nlabel">Üç sınamanın bilançosu</div>
+    <p>Godot: çalışır, ama değişimsizliği ancak negatif alan olarak gösterir. Crimp: parlak — model metinde kendini bulur. Karagöz: spiraller ışıldar, ama birim sorunu (oyun mu gelenek mi) ve doğaçlama sınırı açıkta kalır. Üçü birden şunu öğretir: matris evrensel anahtar değildir; belirli bir soru ailesinin — dönüşüm, kesişim, eşik sorularının — aracıdır. Evrensellik iddiası zaten Kural 1'le çelişirdi.</p>
+  </div>
+</section>
+<!-- ════════ BÖLÜM 7 ════════ -->
+<section class="chapter" id="b7">
+  <div class="kicker">Bölüm 7 · Vaka</div>
+  <h2 class="ch">Macbeth: <em>dost vaka</em></h2>
+  <p class="lead">Şimdi modelin tam boy bir uygulaması — ama bir itirafla açıyorum: Macbeth dost vakadır. Kan ve kehanet imge kümelerini Spurgeon 1935'te saymıştı; tematik okumaya en yatkın metinlerden biriyle çalışıyorum. Bu bölüm kanıt değil, gösterimdir. Kanıt yükü önceki bölümdeydi.</p>
+
+  <p>Matrisim altı spiral görüyor. <strong>KAN</strong>, beş faz: maddi onur (1.2 — kanlı yüzbaşının raporu, kan burada madalyadır) → maddi suç (2.2 — hançer, eller) → hayaletsel (3.4 — Banquo'nun sofradaki kanlı saçları) → sembolik (4.1 — kazandaki bulaşma, soy kanı) → fenomenolojik (5.1 — koku: "Arabistan'ın bütün kokuları bu küçük eli tatlandıramaz"). Aynı kelime, beş ayrı varlık kipi. Kural 2'nin ders kitabı örneği.</p>
+
+  <p><strong>KEHANET</strong>, üç faz: alınan (1.3 — cadılar söyler, Macbeth dinler; epistemik armağan) → talep edilen (4.1 — Macbeth artık kehanete gider, sorular sorar; epistemik bağımlılık) → ihanete uğrayan (5.5–5.8 — orman yürür, sezaryen doğum; kehanetin dili sözünde durup anlamında ihanet eder). Üç uğrak yeter; dördüncü faz icat etmek Kural 3'ü çiğnemek olurdu.</p>
+
+  <p><strong>GÜÇ</strong>, dört faz: arzu → gasp → paranoya-yönetimi → oto-imha. <strong>SUÇLULUK</strong>, üç faz: akut şok (2.2 — "Amen diyemedim") → projeksiyon (3.4 — hayalet, suçun dışarı yansıması) → somatizasyon (5.1 — uyurgezerlik, el ovma; suç bedene iner). Dikkat: suçluluk eylemden önce yoktur — Macbeth pişmanlıkla değil, iştahla başlar. Spiralin geç doğması da bilgidir.</p>
+
+  <p><strong>CİNSİYET</strong>, dört faz: "Unsex me here" (1.5 — Lady Macbeth kadınlığını performatif olarak söker) → erkeklik şantajı (1.7 — "O zaman erkek miydin?") → rollerin tersine dönüşü (3.4 — sofrada çöken Macbeth'i Lady toparlar) → bedensel hapis (5.1 — sökülen kadınlık somatik intikamını alır). <strong>DELİLİK</strong>, beş faz: hallüsinasyon (hançer) → kamusal çatlak (sofra) → sızma (uyurgezerlik) → disosiyasyon (Lady'nin sessiz ölümü) → nihilistik berraklık (5.5 — "Yarın, yarın, yarın": delirmemiş bir adamın deliliği aşan netliği).</p>
+
+  <h3>Kesişimler ve iki eşik</h3>
+  <p>Haritamda yedi kesişim var; üçü taşıyıcı. <strong>Kehanet × Güç</strong> (1.3): kehanet güç arzusunu yaratmaz, ateşler — deformasyon kesişimi; karşı-olgusal test geçer (kehanet olmasaydı arzu eyleme bu hızda dökülmezdi). <strong>Kan × Suçluluk</strong> (2.2): oyunun ilk kritik eşiği; iki spiral aynı sahnede kip değiştirir, sahne taşıma kapasitesini aşar. <strong>Güç × Suçluluk → PARANOYA</strong> (3.1–3.4): beşinci bölümde anlattığım generatif kesişim; oyunun ikinci yarısının fiili yöneticisi burada doğar. İkinci kritik eşik 5.1'dir — uyurgezerlik: kan, suçluluk, cinsiyet ve delilik aynı sahnede, hepsi uç fazlarında. Freytag'ın piramidi bu iki tepeli yapıyı tek doruğa sıkıştırmak zorunda kalır; matris ikisini de eşik olarak işaretler ve aralarındaki üç perdelik gerilim yayını görünür kılar.</p>
+
+  <p>Karakter düğümleri: Lady Macbeth dört spiralin (cinsiyet, suçluluk, kan, delilik) kesişimidir — oyunun en yoğun düğümü; "ikincil karakter" sayılması klasik modellerin protagonist takıntısının ürünüdür, matriste merkeze yakındır. Macbeth beş spiral taşır ama gücün tekeline girer; Cadılar tek spiralin (kehanet) saf taşıyıcısıdır — düğüm bile değil, kaynak. Bu dağılım reji kararlarını doğrudan besler: sahne ağırlığı, ışık odağı, mizansen merkezi düğüm yoğunluğunu izleyebilir.</p>
+
+  <div class="note">
+    <div class="nlabel">Dost vakanın dürüst dersi</div>
+    <p>Macbeth'te model akıcı çalışıyorsa bunun bir nedeni metnin matrise yatkınlığıdır. Asıl güven, altıncı bölümün zor vakalarından gelir. İkisini birlikte okuyun: Macbeth modelin ne <em>yapabildiğini</em>, Godot-Crimp-Karagöz ne <em>yapamadığını</em> gösterir. Bir aletin değeri ikisinin toplamıdır.</p>
+  </div>
+</section>
+
+<!-- ════════ BÖLÜM 8 ════════ -->
+<section class="chapter" id="b8">
+  <div class="kicker">Bölüm 8 · Uyarlama</div>
+  <h2 class="ch">Benim Adım Kırmızı: <em>aktarım protokolü</em></h2>
+  <p class="lead">Bu bölüm kitabın en kişisel yeri: Orhan Pamuk'un romanını sahneye taşıma çalışmam. Ve bir iddia: matris, uyarlamanın "ne kalsın, ne atılsın" sorusunu yanlış soru ilan eder. Doğru soru: <strong>hangi spiraller hangi kiplerle göçecek?</strong></p>
+
+  <p>Uyarlama kuramının klasik kavgası sadakat üzerinedir: roman sahneye "ihanet" mi ediliyor? Linda Hutcheon <em>A Theory of Adaptation</em>'da (2006) bu kavgayı çoktan bitirdi — uyarlama ikincil bir kopya değil, kendi başına yaratımdır. Katılıyorum; ama Hutcheon <em>ne</em> yapılacağını söyler, <em>nasıl</em> yapılacağını yine söylemez. Lehmann boşluğunun uyarlamadaki ikizi. Matrisin teklifi şu: uyarlama bir çeviri değil, <strong>yeniden haritalamadır</strong>. Önce romanın matrisi çıkarılır; sonra her spiral için tek tek sorulur: bu tema sahnede hangi varlık kipinde yaşayabilir? Roman ortamının kipleri ile sahne ortamının kipleri aynı değildir — aktarım protokolü tam bu kip çevirisidir.</p>
+
+  <h3>Romanın matrisi</h3>
+  <p><em>Benim Adım Kırmızı</em> çok anlatıcılı bir romandır: ölü bir adam, bir köpek, bir ağaç, bir altın sikke, kırmızının kendisi — herkes ve her şey konuşur. Klasik uyarlama buna bakıp "anlatıcıları kim oynayacak?" diye sorar. Matris başka bir şey görür: <strong>roman zaten bir düğüm yapısıdır.</strong> Her bölüm bir düğümün — bir kesişim noktasının — kendi sesiyle konuşmasıdır. Pamuk, Kural 5'i romanda uygulamıştır: karakter özne değil, temaların kesişiminden konuşan konum. Benim spirallerim: <strong>GÖRME</strong> (minyatürün bakışı: Allah'ın bakışından — kuşbakışı, perspektifsiz — Frenk perspektifine, yani bireyin bakışına; epistemik kipten fenomenolojik kipe ölümcül geçiş), <strong>KIRMIZI</strong> (boya olarak maddi → kan olarak maddi-suç → anlatıcı olarak performatif: renk konuşur), <strong>İMZA/ÜSLUP</strong> (nakkaşın görünmezlik ideali ile bireysel iz bırakma arzusu — kimliğin epistemik krizi), <strong>KÖRLÜK</strong> (ustalığın mükâfatı ve cezası: maddi körlükten hayaletsel iç görüye), <strong>CİNAYET</strong> (iki ölümün etrafında dönen suç spirali).</p>
+
+  <p>Generatif kesişim — beşinci bölümde söz vermiştim: GÖRME × CİNAYET kesişiminden provada "görme suçu" doğdu. Romanda katil, kurbanını resim meselesi yüzünden öldürür; bakmanın kendisi suç ortaklığıdır. Sahnede bu, seyirciye döner: minyatüre bakan seyirci, perspektife alışmış gözüyle, romanın "günah" dediği bakışın ta kendisini yapar. Seyirci katil pozisyonuna yerleşir. Bu spiral romanda örtüktür; sahnede merkez olabilir. Uyarlamanın yaratıcılığı tam burada: kaynak metnin örtük spiralini sahnenin ana spirali yapmak — ihanet değil, haritanın yeniden çizilmesi.</p>
+
+  <h3>Kip çevirisi tablosu</h3>
+  <p>Protokolün kalbi şu sorudur: romanda epistemik olan, sahnede ne olur? Örnek: İMZA spirali romanda epistemik yaşar — okur, üslup tartışmalarını <em>okur</em>. Sahnede epistemik kip zayıftır; çeviri kararım onu <em>somatik</em> kipe taşımak: her nakkaşın bedensel bir çalışma imzası — oturuş, fırça tutuş, nefes ritmi. Üslup tartışması sahnede beden farkı olarak görünür. KIRMIZI romanda performatiftir (konuşur); sahnede ışık ve kostüm üzerinden fenomenolojik-maddi çifte kipe geçer — ama tek bir sahnede, romandaki monologunda, performatif kipini korur: kırmızı konuşur, sahne kırmızıya keser. GÖRME spirali ise sahnenin ana aygıtına yerleşir: perspektif/perspektifsizlik, mizansenin kendisinde — kuşbakışı düzenden derinlikli düzene geçiş, oyunun görsel dramaturjisi olur. Giriş'teki "gözün krizi" burada sahneye iner: deepfake çağının seyircisine, görmenin masum olmadığını dört yüz yıllık bir nakkaş kavgasıyla anlatmak.</p>
+
+  <div class="note">
+    <div class="nlabel">Protokol — dört adım</div>
+    <p>1. Kaynağın matrisini çıkar (spiraller, kipler, kesişimler). 2. Her spiral için hedef ortamın kip envanterini sor: bu tema sahnede hangi kiplerde yaşayabilir? 3. Kip çevirisini tek tek kararlaştır — neyin kipi korunur, neyinki dönüşür. 4. Hedef ortamda doğacak yeni generatif kesişimlere yer bırak: uyarlamanın özgünlüğü çoğu kez orada, kaynakta olmayan doğumlarda yatar.</p>
+  </div>
+</section>
+
+<!-- ════════ BÖLÜM 9 ════════ -->
+<section class="chapter" id="b9">
+  <div class="kicker">Bölüm 9 · Metodoloji</div>
+  <h2 class="ch">Bakış kimin? <em>AI ile çalışmak</em></h2>
+  <p class="lead">Bu kitabın paketinde bir uygulama var ve içinde bir dil modeli çalışıyor: oyunu veriyorsunuz, ilk matrisi o çıkarıyor. Kural 1 "bakış özneldir" diyor. O zaman dürüst soru: makinenin çıkardığı matris kimin bakışı?</p>
+
+  <p>Cevabı süslemeden vereyim: <strong>hiç kimsenin — ve herkesin.</strong> Bir dil modelinin <em>Macbeth</em> okuması, o oyun hakkında yazılmış metinlerin istatistiksel tortusudur: yerleşik eleştirinin, ders kitaplarının, kanonik yorumların ortalaması. Yani AI'ın ilk matrisi tam olarak şudur: <em>doxa</em> — modelin aşmak için kurulduğu yerleşik okuma. Bunda paradoks var ve paradoksu saklamak yerine yöntemleştiriyorum.</p>
+
+  <h3>Çapa tehlikesi</h3>
+  <p>Bilişsel psikolojinin bilinen olgusu: ilk öneri çapa atar (anchoring). AI size altı spiralli bir Macbeth verdiyse, sizin matrisiniz büyük olasılıkla o altının çevresinde dolanacaktır — silersiniz, eklersiniz, ama koordinat sistemi onun kurduğudur. Kural 1 pratikte kendi aracım tarafından baltalanabilir: özgür bakış vaat eden model, ortalama bakışla işe başlatır. Bu riski yazmayan bir AI-destekli yöntem kitabı dürüst değildir.</p>
+
+  <p>Karşı tedbirlerim üç tane. <strong>Bir — ters sıra:</strong> önemli işlerde önce kendi kaba matrisinizi çıkarın, AI'ı sonra çağırın; makine ilk söz değil, ikinci görüş olsun. <strong>İki — fark okuması:</strong> AI matrisiyle kendi matrisinizi yan yana koyup aynılıklara değil <em>farklara</em> bakın; sizin görüp onun görmediği spiral, muhtemelen yorumunuzun en özgün yeridir — çünkü doxada yoktur. <strong>Üç — kasıtlı sapma:</strong> AI'dan bilerek aykırı okumalar isteyin ("bu oyunu yalnızca nesneler üzerinden haritala", "bütün spiralleri somatik kiple sınırla") — makineyi ortalamanın temsilcisi değil, varyasyon üreteci olarak kullanın. Üçü de uygulamada tek cümlelik komutlardır; kılavuzda ayrıntısı var.</p>
+
+  <h3>Hangi matris daha iyi? — hermeneutik geçerlilik</h3>
+  <p>Kural 1 ile Kural 2–3 arasındaki gerilimi dördüncü duvarı yıkmadan söyleyeyim: bakış öznelse, testler neyi test eder? Kategoriler bana aitse, herhangi bir motifi kategori oynayarak spiral ilan edebilirim — test döngüselleşir. Bu gerilimi çözemem; ama adlandırıp ölçüt koyabilirim. İki matris arasında "doğruluk" yarışı yoktur; <strong>verimlilik</strong> yarışı vardır. Üç ölçüt öneriyorum. <strong>Üretkenlik:</strong> bu matris provada kaç karar doğuruyor — mizansen, ışık, oyunculuk kararına dönüşüyor mu, yoksa duvar süsü mü? <strong>Sahneye çevrilebilirlik:</strong> haritadaki her öğe sahnede bir karşılık bulabiliyor mu? <strong>Metnin direnişine saygı:</strong> matris, metnin ona direnen yerlerini — altıncı bölümdeki negatif alanlar gibi — kaydetmiş mi, yoksa her şeyi açıklayan kapalı sistem mi kurmuş? Her şeyi açıklayan harita, Deleuze'ün diliyle, harita olmaktan çıkıp kopyaya dönüşmüştür. Gadamer'in diliyle: metnin "şeyi" yoruma direnir; o direnci silen yorum, yorum değildir.</p>
+
+  <p>Bu çerçevenin akademik adı var: uygulama temelli araştırma — Robin Nelson'ın <em>Practice as Research</em>'ü (2013). Bilgi yalnızca metin yazarak değil, yaparak da üretilir; prova bir laboratuvardır, matris onun kayıt aygıtıdır. Bu kitabın kendisi de PaR ürünüdür: model masada değil, sahnede ve bir yazılımın içinde, kullanıla kullanıla şekillendi. Giriş'in son cümlesini hatırlayın: sahne, yeni bir bilgi rejiminin doğum yatağı olabilir. AI ile çalışmak o doğum odasına yeni bir alet sokmaktır — forsepsin bebeği şekillendirmemesi için elin bilinçli olması gerekir. Bu bölüm o bilincin protokolüdür.</p>
+</section>
+<!-- ════════ BÖLÜM 10 ════════ -->
+<section class="chapter" id="b10">
+  <div class="kicker">Bölüm 10 · Dengeli polemik</div>
+  <h2 class="ch">Karşı <em>durum</em></h2>
+  <p class="lead">Bütün kitap boyunca klasik modellerin göremediklerini yazdım. Şimdi ters tablo: onların yapıp matrisin yapamadığı. Rakibin karikatürünü yenen kimseyi ikna edemez.</p>
+
+  <p><strong>Aristoteles oyun yazdırır; matris yazdırmaz.</strong> <em>Poetika</em> normatif bir poetikadır: oyun <em>nasıl kurulur</em> sorusuna cevap verir — olay örgüsü karakterden önce gelir, tanıma ile baht dönüşü çakışırsa etki büyür, epizodik örgü en kötüsüdür. Bir oyun yazarına bugün bile iş gören tavsiyelerdir bunlar. Matris analitiktir: var olan metni haritalar, boş sayfaya tek kelime söylemez. Yazara aleti soran birine matrisi değil Aristoteles'i veririm; Lajos Egri'yi, McKee'yi veririm — onlar Aristoteles'in torunlarıdır ve işlerini yaparlar.</p>
+
+  <p><strong>Katharsis seyirciyi merkeze koyar; matris kıyıya iter.</strong> Aristoteles'in en derin sorusu yapı sorusu değil, etki sorusudur: tragedya seyircide ne yapar? Acıma ve korku yoluyla arınma — tartışmalı bir kavram, ama soru muhteşem. Matriste seyirci nerede? Dürüst cevap: opsiyonel bir katmanda. Model metin-sahne ilişkisini haritalar; sahne-seyirci ilişkisi eklenti olarak durur. Fischer-Lichte'nin geribesleme döngüsü, Rancière'in özgürleşen seyircisi — bu soruların matristeki yeri henüz bir ek katmandır, kurucu eksen değil. Bu bir eksikliktir ve gelecek sürümün ödevi olarak buraya yazıyorum.</p>
+
+  <p><strong>Freytag öğretir; matris öğrenilmek ister.</strong> Piramidin gücü kabalığındadır: beş dakikada anlatılır, bir lise sınıfı aynı günde kullanmaya başlar. Pedagojik araç olarak rakipsizdir. Matrisin sekiz kuralı, yedi kipi, üç kesişim tipi vardır; öğrenme eğrisi diktir. Bir aracın yaygınlaşması kavramsal gücünden çok öğretilebilirliğine bağlıdır — Freytag bunu kanıtladı. Kılavuz ve uygulama bu eğriyi yumuşatmak için var; ama piramidin zarif kabalığına asla ulaşamayacağım.</p>
+
+  <p><strong>Hero's Journey anlam vaat eder; matris etmez.</strong> Campbell'ın monomiti bir dünya görüşü taşır: yolculuk dönüşümle ödüllenir, kahraman iksirle döner, hikâye şifa verir. Bu vaat — sahte bile olsa — insanları yazmaya, oynamaya, izlemeye çağırır. Matris hiçbir teselli sunmaz: harita çıkarır, anlam sözü vermez. Giriş'i okuyanlar bunun bilinçli olduğunu görür — yeni logos kesinlik vaat edemez. Ama bedelini de bileyim: anlam vaadi olmayan modeller soğuk bulunur, ve soğukluk bir retorik zaaftır.</p>
+
+  <div class="note">
+    <div class="nlabel">Tablo bilançosu</div>
+    <p>Yazara araç: Aristoteles kazanır. Seyirci sorusu: Aristoteles ile Fischer-Lichte kazanır. Öğretilebilirlik: Freytag kazanır. Anlam vaadi: Campbell kazanır. Dönüşüm analizi, çoklu yapı, eşik haritası, uyarlama protokolü: matris kazanır. Alet çantasında tek alet taşıyan ustaya güvenmeyin — bana da.</p>
+  </div>
+</section>
+
+<!-- ════════ BÖLÜM 11 ════════ -->
+<section class="chapter" id="b11">
+  <div class="kicker">Bölüm 11 · Paket</div>
+  <h2 class="ch">Uygulama ve <em>kılavuz</em></h2>
+  <p class="lead">Bu kitap yalnız gelmiyor. Aynı pakette modelin çalışan yazılımı ve 45 sayfalık kullanım kılavuzu var. Kuram, alet ve el kitabı — üçü birlikte.</p>
+
+  <p><strong>Uygulama</strong> (<em>Matris-Dramaturjisi-AI.html</em>) tek bir dosyadır: tarayıcıda açılır, kurulum istemez, veriler bilgisayarınızda kalır. İçinde neler var? Spiral editörü — fazlar, varlık kipleri, mutasyon vektörleri. Otomatik matris grid'i. Üç tipli kesişim yönetimi ve karşı-olgusal test. Karakter düğümleri, sahne planlayıcı, replik düzeyinde diyalog ve tempo katmanı. Spirallerin gerçekten spiral olarak döndüğü üç boyutlu harita. Üç testli analiz paneli — leitmotif maskelenmesi, deformasyon yoklaması, simetri uyarısı. Klasik modellerle karşılaştırma sekmesi: aynı oyunu Aristoteles'in, Freytag'ın ve Hero's Journey'nin gözünden yan yana okur, her modelin kör noktalarını listeler. Ve bir yapay zekâ motoru: oyun adı verin ya da tam metni yükleyin, ilk haritayı çıkarsın — dokuzuncu bölümdeki bütün uyarılar geçerli olmak üzere.</p>
+
+  <p>Pratik özellikler: çalışmanız beş saniyede bir kendiliğinden kaydedilir; uygulamayı kapatıp açtığınızda kaldığınız yerden devam edersiniz. Geri al düğmesi son on yıkıcı işlemi telafi eder. JSON dışa aktarma sürüm arşiviniz, HTML rapor ekibinizle paylaşım formatınızdır. Tek tuşla yüklenen Macbeth örneği, yedinci bölümün haritasını ekranda gezilebilir halde sunar — kitapla uygulamayı yan yana açıp okumanızı öneririm.</p>
+
+  <p><strong>Kılavuz</strong> (PDF ve düzenlenebilir DOCX olarak) yirmi bölümdür: kurulumdan sekiz kuralın pratiğine, sekme sekme arayüzden üç çalışma senaryosuna, sorun gidermeden kavram sözlüğüne. Kitap <em>neden</em>i anlatır; kılavuz <em>nasıl</em>ı. Aralarındaki işbölümü bilinçlidir: bu kitapta tek bir düğme tarifi yoktur, kılavuzda tek bir kuramsal tartışma yoktur.</p>
+
+  <div class="note">
+    <div class="nlabel">Paketin içindekiler</div>
+    <p>1. Bu kitap — <em>Matris-Dramaturjisi-Kitap.html</em> (güncellenmeye açık sürüm). 2. Uygulama — <em>Matris-Dramaturjisi-AI.html</em>. 3. Kılavuz — PDF ve DOCX. 4. README — hızlı başlangıç notu. Hepsi çevrimdışı çalışır; hiçbiri kayıt, üyelik, kurulum istemez.</p>
+  </div>
+</section>
+
+<!-- ════════ OKUMA LİSTESİ ════════ -->
+<section class="chapter" id="okuma">
+  <div class="kicker">Ek · Faydalandığım isimler ve kitaplar</div>
+  <h2 class="ch">Okuma <em>listesi</em></h2>
+  <p class="lead">Akademik kaynakça değil; yol arkadaşları listesi. Her birinin yanına bu kitaba ne verdiğini yazdım — hangi kapıdan girmek isterseniz oradan girin.</p>
+
+  <div class="ref"><div class="ref-name">Hans-Thies Lehmann</div><div class="ref-work">Postdramatisches Theater (1999) · Türkçesi: Postdramatik Tiyatro</div><div class="ref-why">Kitabın asıl muhatabı. Lineer dramanın sonrasını teşhis etti; bu kitap o teşhise alet üretme denemesi.</div></div>
+  <div class="ref"><div class="ref-name">Marianne Van Kerkhoven</div><div class="ref-work">"Looking without pencil in the hand" ve açık dramaturji yazıları (1990'lar)</div><div class="ref-why">Dramaturjinin kapanmayan bir süreç olduğu fikri. Bu kitabın "güncellenmeye açık" oluşu onun mirası.</div></div>
+  <div class="ref"><div class="ref-name">Eugenio Barba</div><div class="ref-work">On Directing and Dramaturgy: Burning the House (2010)</div><div class="ref-why">Dokuma dramaturjisi — eşzamanlı ipliklerin örgüsü olarak sahne. Paralel spirallerin antropolojik akrabası.</div></div>
+  <div class="ref"><div class="ref-name">Cathy Turner & Synne Behrndt</div><div class="ref-work">Dramaturgy and Performance (2008)</div><div class="ref-why">Yeni dramaturji pratiklerinin haritası. Matrisin hangi mahallede oturduğunu gösteren şehir planı.</div></div>
+  <div class="ref"><div class="ref-name">Patrice Pavis</div><div class="ref-work">L'Analyse des spectacles (1996)</div><div class="ref-why">Vektörizasyon — en yakın akraba kavram. Birinci bölümdeki yüzleşmenin muhatabı.</div></div>
+  <div class="ref"><div class="ref-name">Erika Fischer-Lichte</div><div class="ref-work">Ästhetik des Performativen (2004) · Türkçesi: Performatif Estetik</div><div class="ref-why">Otopoietik geribesleme döngüsü. Beşinci bölümdeki terim hesabının alacaklısı; seyirci sorusunun asıl sahibi.</div></div>
+  <div class="ref"><div class="ref-name">Caroline Spurgeon</div><div class="ref-work">Shakespeare's Imagery and What It Tells Us (1935)</div><div class="ref-why">İmge kümeleri — proto-spiraller. Macbeth'in kan haritasını benden seksen yıl önce çıkaran kadın.</div></div>
+  <div class="ref"><div class="ref-name">G. Wilson Knight</div><div class="ref-work">The Wheel of Fire (1930)</div><div class="ref-why">Oyunu zamansal öykü değil uzamsal desen olarak okuma cüreti. Topoloji sekmesinin büyük dedesi.</div></div>
+  <div class="ref"><div class="ref-name">Franco Moretti</div><div class="ref-work">"Network Theory, Plot Analysis" (New Left Review, 2011) ve Distant Reading (2013)</div><div class="ref-why">Karakteri ağ konumu olarak okumak. Kural 5'in sayısal öncülü.</div></div>
+  <div class="ref"><div class="ref-name">Gilles Deleuze & Félix Guattari</div><div class="ref-work">Mille Plateaux (1980) · Türkçesi: Bin Yayla</div><div class="ref-why">Rizom, harita/kopya ayrımı. Üçüncü bölümdeki savunmanın hem savcısı hem avukatı.</div></div>
+  <div class="ref"><div class="ref-name">Jacques Derrida</div><div class="ref-work">Spectres de Marx (1993) · Türkçesi: Marx'ın Hayaletleri</div><div class="ref-why">Hauntoloji — hayaletsel varlık kipinin felsefi tapusu.</div></div>
+  <div class="ref"><div class="ref-name">W. B. Yeats</div><div class="ref-work">A Vision (1925/1937)</div><div class="ref-why">Gyre'lar — spiral kelimesinin kozmolojik yükü. Bilerek taşıyorum.</div></div>
+  <div class="ref"><div class="ref-name">Friedrich Nietzsche</div><div class="ref-work">Die Geburt der Tragödie (1872) · Türkçesi: Tragedyanın Doğuşu</div><div class="ref-why">Dionysos'suz sahnenin ölü sahne olduğu teşhisi. Girişin bel kemiği.</div></div>
+  <div class="ref"><div class="ref-name">Antonin Artaud</div><div class="ref-work">Le Théâtre et son double (1938) · Türkçesi: Tiyatro ve İkizi</div><div class="ref-why">"Logosu yıkın, bedene dönün." Girişteki sanat-eşik tezinin en radikal sesi.</div></div>
+  <div class="ref"><div class="ref-name">Jean Baudrillard</div><div class="ref-work">Simulacres et simulation (1981)</div><div class="ref-why">"Harita araziden önce gelir." Gözün krizinin kırk yıl önceden yazılmış teorisi.</div></div>
+  <div class="ref"><div class="ref-name">Walter Ong</div><div class="ref-work">Orality and Literacy (1982) · Türkçesi: Sözlü ve Yazılı Kültür</div><div class="ref-why">Yazının düşünce geometrisini değiştirmesi. Mitos/logos ayrımının medya arkeolojisi.</div></div>
+  <div class="ref"><div class="ref-name">Silvia Federici</div><div class="ref-work">Caliban and the Witch (2004) · Türkçesi: Caliban ve Cadı</div><div class="ref-why">Mitik bilginin tasfiyesinin politik ekonomisi. Girişteki cadı bahsinin kaynağı.</div></div>
+  <div class="ref"><div class="ref-name">René Girard</div><div class="ref-work">La Violence et le sacré (1972) · Türkçesi: Şiddet ve Kutsal</div><div class="ref-why">Günah keçisi mekanizması — dijital linç çağının antik şeması.</div></div>
+  <div class="ref"><div class="ref-name">Nick Bostrom</div><div class="ref-work">"Are You Living in a Computer Simulation?" (Philosophical Quarterly, 2003)</div><div class="ref-why">Descartes'ın kötü cininin istatistiksel formu. Gözün krizinin çağdaş kanıtı.</div></div>
+  <div class="ref"><div class="ref-name">Linda Hutcheon</div><div class="ref-work">A Theory of Adaptation (2006)</div><div class="ref-why">Uyarlamanın kopya değil yaratım olduğu tezi. Sekizinci bölümün zemini.</div></div>
+  <div class="ref"><div class="ref-name">Robin Nelson</div><div class="ref-work">Practice as Research in the Arts (2013)</div><div class="ref-why">Yaparak bilgi üretmenin akademik çerçevesi. Dokuzuncu bölümün metodolojik şemsiyesi.</div></div>
+  <div class="ref"><div class="ref-name">Orhan Pamuk</div><div class="ref-work">Benim Adım Kırmızı (1998)</div><div class="ref-why">Çok anlatıcılı düğüm yapısının romanı. Sekizinci bölümün hem konusu hem öğretmeni.</div></div>
+  <div class="ref"><div class="ref-name">Aristoteles</div><div class="ref-work">Poetika (MÖ ~335)</div><div class="ref-why">Hâlâ tek normatif poetika. Onuncu bölümde hakkı teslim edildi: yazara araç soran ona gitsin.</div></div>
+  <div class="ref"><div class="ref-name">Gustav Freytag</div><div class="ref-work">Die Technik des Dramas (1863)</div><div class="ref-why">Piramit — öğretilebilirliğin altın standardı. Rakip olarak değil, pedagojik kıskançlık nesnesi olarak listede.</div></div>
+  <div class="ref"><div class="ref-name">Joseph Campbell & Christopher Vogler</div><div class="ref-work">The Hero with a Thousand Faces (1949) · The Writer's Journey (1992)</div><div class="ref-why">Monomit ve Hollywood uygulaması. Anlam vaadinin gücünü onlardan öğrendim — vaadin kendisini almadan.</div></div>
+  <div class="ref"><div class="ref-name">Samuel Beckett · Martin Crimp</div><div class="ref-work">En attendant Godot (1952) · Attempts on Her Life (1997)</div><div class="ref-why">Altıncı bölümün iki sınayıcısı: değişimsizliğin ve karaktersizliğin ustaları.</div></div>
+  <div class="ref"><div class="ref-name">Karagöz ve meddah geleneği</div><div class="ref-work">Anonim repertuvar; bkz. Metin And, Geleneksel Türk Tiyatrosu (1969)</div><div class="ref-why">Modelin kanon dışı sınavı — ve "birim oyun mu gelenek mi" sorusunun sahibi. Metin And'ın külliyatı bu kapının anahtarı.</div></div>
+</section>
+
+<!-- ════════ KOLOFON ════════ -->
+<section class="chapter colophon" id="kolofon">
+  <h2>Kolofon — güncelleme notu</h2>
+  <p><strong>Sürüm 1.0 · Haziran 2026.</strong> Bu kitap güncellenmeye açıktır — Van Kerkhoven'ın dramaturjisi gibi: kapanmaz. Tek bir HTML dosyasıdır; her bölüm bağımsız bir bölmedir, yeni bölümler eklenebilir, vakalar büyüyebilir, okuma listesi uzayabilir. Sürüm numarası kapakta ve bu sayfada güncellenir; değişiklikler buraya tarihli not olarak düşülür.</p>
+  <p><strong>Sürüm geçmişi.</strong> 1.0 (Haziran 2026): İlk yayım. Giriş ("Çürümenin Sanatı — Prensip 1: Gözün Krizi" tam metniyle), on bir bölüm, okuma listesi, uygulama ve kılavuz paketi.</p>
+  <p><strong>Künye.</strong> Yazan: Murat Daltaban. Üretim: DOT Theatre, İstanbul — Edinburgh. Kitap, uygulama ve kılavuz tek pakettir; parçaları birbirine atıf verir.</p>
+  <p><strong>Alıntı için:</strong> Daltaban, Murat (2026). <em>Matris Dramaturjisi: Lehmann'dan Sonra Sahneyi Haritalamak</em>. Sürüm 1.0. İstanbul: DOT Theatre.</p>
+  <p><strong>Lisans.</strong> Metin CC BY-NC 4.0 ile paylaşılır: kaynak göstererek, ticari olmayan her bağlamda — derste, provada, atölyede — serbestçe kullanılabilir, çoğaltılabilir.</p>
+  <p><strong>Teşekkür.</strong> Bu kitap bir prova odasının ürünüdür. Sorularıyla modeli büken herkese — oyunculara, tasarımcılara, itiraz eden dramaturglara — ve metnin direnişine.</p>
+</section>
+
+</main>
+</body>
+</html>
